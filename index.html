@@ -273,6 +273,16 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
   </div>
   <div class="work-grid">
+    <div class="work-entry" data-cat="fiction" data-id="1179229656" data-title="Bêtes de Flic" data-dir="Dir. Slimane Baptiste Berhoun">
+      <div class="work-item">
+        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1179229656?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+      </div>
+      <div class="work-item-info">
+        <div class="work-name">Bêtes de Flic</div>
+        <div class="work-director">Dir. Slimane Baptiste Berhoun</div>
+        <div class="work-cat">Fiction</div>
+      </div>
+    </div>
     <div class="work-entry" data-cat="fiction" data-id="1125493349" data-title="Rien ne t’efface" data-dir="Dir. Jérôme Cornuau">
       <div class="work-item">
         <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1125493349?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
@@ -470,7 +480,7 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     <div class="contact-info">
       <div>
         <div class="contact-item-label">Email</div>
-        <div class="contact-item-value"><a href="mailto:romain.wilhelm.dop@gmail.com">romain.wilhelm.dop@gmail.com</a></div>
+        <div class="contact-item-value"><a href="/cdn-cgi/l/email-protection#ff8d90929e9691d1889693979a9392d19b908fbf98929e9693d19c9092"><span class="__cf_email__" data-cfemail="b9cbd6d4d8d0d797ced0d5d1dcd5d497ddd6c9f9ded4d8d0d597dad6d4">[email&#160;protected]</span></a></div>
       </div>
       <div>
         <div class="contact-item-label">Téléphone</div>
@@ -497,7 +507,7 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   <span class="footer-logo">R. Wilhelm · DOP</span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   function openModal(id, title, director) {
     var modal = document.getElementById('video-modal');
     document.getElementById('modal-iframe').src = 'https://player.vimeo.com/video/' + id + '?autoplay=1&color=111111&title=0&byline=0&portrait=0';
@@ -551,15 +561,4 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     btn.classList.add('active');
     document.querySelectorAll('.work-entry').forEach(function(item) {
       var match = cat==='all' || item.dataset.cat===cat;
-      item.style.opacity = match ? '1' : '0.12';
-      item.style.pointerEvents = match ? 'auto' : 'none';
-    });
-  }
-
-  var nav = document.getElementById('main-nav');
-  window.addEventListener('scroll', function() {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  });
-</script>
-</body>
-</html>
+      item.style.opacity = match ? '1' : '0.12'
