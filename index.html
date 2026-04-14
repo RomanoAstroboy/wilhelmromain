@@ -7,6 +7,7 @@
 <meta name="description" content="Romain Wilhelm, Directeur de la Photographie. Fiction, publicité, clips musicaux. Basé en France.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://player.vimeo.com/api/player.js"></script>
 <link rel="canonical" href="https://www.wilhelmromain.com/">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Romain Wilhelm">
@@ -30,11 +31,9 @@
 html { scroll-behavior: smooth; }
 body { background:var(--white);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:none; }
 
-/* CURSOR */
 .cursor { position:fixed;width:6px;height:6px;background:var(--text);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s; }
 .cursor-ring { position:fixed;width:32px;height:32px;border:1px solid rgba(0,0,0,0.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s; }
 
-/* NAV */
 nav {
   position:fixed;top:0;left:0;right:0;z-index:100;
   padding:32px 56px;
@@ -52,8 +51,10 @@ nav.scrolled .nav-logo-sub { opacity:1;transform:translateY(0); }
 .nav-links { display:flex;gap:48px;list-style:none; }
 .nav-links a { font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s; }
 .nav-links a:hover { color:var(--text); }
+.nav-socials { display:flex;align-items:center;gap:20px; }
+.nav-social-link { color:var(--muted);transition:color .3s;display:flex;align-items:center; }
+.nav-social-link:hover { color:var(--text); }
 
-/* HERO */
 #hero {
   min-height:100vh;
   display:flex;flex-direction:column;justify-content:flex-end;
@@ -71,87 +72,60 @@ nav.scrolled .nav-logo-sub { opacity:1;transform:translateY(0); }
 .btn-ghost { font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s; }
 .btn-ghost:hover { color:var(--text); }
 
-/* WORK */
 #work { background:var(--white);padding:120px 0; }
 .work-inner-header { padding:0 40px;margin-bottom:56px; }
-.section-label { font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:16px; }
-.section-title { font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.5rem);font-weight:300;line-height:1; }
-.section-title em { font-style:italic; }
 .work-header { display:flex;justify-content:space-between;align-items:flex-end; }
 .work-filters { display:flex;gap:2px; }
 .filter-btn { padding:8px 20px;font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:none;transition:all .3s; }
 .filter-btn.active, .filter-btn:hover { border-color:var(--text);color:var(--text);background:var(--off); }
 
-/* WORK GRID - 3 colonnes */
-.work-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:0;
-  border-top:1px solid var(--border);
-}
-.work-entry {
-  cursor:none;
-  border-right:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-}
+.work-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border); }
+.work-entry { cursor:none;border-right:1px solid var(--border);border-bottom:1px solid var(--border); }
 .work-entry:nth-child(3n) { border-right:none; }
+
 .work-item {
   position:relative;overflow:hidden;
   background:var(--white);
-  aspect-ratio:16/9;
-  width:100%;
+  aspect-ratio:16/9;width:100%;
 }
-.work-thumb-bg { position:absolute;inset:0;overflow:hidden; }
+.work-thumb-bg {
+  position:absolute;inset:0;overflow:hidden;
+  background:#e8e6e2;
+}
 .work-thumb-bg iframe {
-  position:absolute;top:0;left:0;width:100%;height:100%;
-  border:none;pointer-events:none;
+  position:absolute;top:-10%;left:-5%;
+  width:110%;height:120%;
+  border:none;
+  pointer-events:none;
   filter:grayscale(8%) brightness(0.95);
   transition:filter .7s ease,transform .8s ease;
 }
 .work-entry:hover .work-thumb-bg iframe { filter:grayscale(0%) brightness(1);transform:scale(1.04); }
-.work-item-info {
-  text-align:center;
-  padding:20px 16px 28px;
-  background:var(--white);
-}
-.work-name {
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.5rem;
-  font-weight:300;
-  color:var(--text);
-  line-height:1.1;
-  margin-bottom:6px;
-}
-.work-director {
-  font-family:'DM Mono',monospace;
-  font-size:0.62rem;
-  color:var(--muted);
-  letter-spacing:0.08em;
-  margin-bottom:4px;
-}
-.work-cat {
-  font-family:'DM Mono',monospace;
-  font-size:0.58rem;
-  letter-spacing:0.22em;
-  text-transform:uppercase;
-  color:var(--muted);
+
+/* Transparent overlay - captures mouse, hides iframe from cursor */
+.work-item-overlay {
+  position:absolute;inset:0;z-index:5;
+  cursor:none;
 }
 
-/* ABOUT */
+.work-item-info { text-align:center;padding:20px 16px 28px;background:var(--white); }
+.work-name { font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--text);line-height:1.1;margin-bottom:6px; }
+.work-director { font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:4px; }
+.work-cat { font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted); }
+
 #about { background:var(--off);padding:160px 56px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center; }
+.section-label { font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:16px; }
 .about-title { font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.5rem);font-weight:300;line-height:1.05;margin-bottom:40px; }
 .about-title em { font-style:italic; }
 .about-bio { font-size:1rem;line-height:1.9;color:rgba(0,0,0,0.6); }
 .about-bio strong { color:var(--text);font-weight:400; }
-.about-stats { margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border);padding-top:40px; }
+.about-stats { margin-top:56px;display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--border);padding-top:40px; }
 .about-stats > div { padding-right:32px; }
-.about-stats > div:last-child { padding-right:0; }
 .stat-num { font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;color:var(--text);line-height:1; }
 .stat-label { font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-top:6px; }
 .about-photo { position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--light); }
 .about-photo img { width:100%;height:100%;object-fit:cover;display:block; }
 
-/* CONTACT */
 #contact { background:var(--white);padding:160px 56px;display:grid;grid-template-columns:1fr 1fr;gap:120px;align-items:start;border-top:1px solid var(--border); }
 .contact-title { font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.5rem);font-weight:300;line-height:1.05;margin-bottom:32px; }
 .contact-title em { font-style:italic; }
@@ -166,26 +140,22 @@ nav.scrolled .nav-logo-sub { opacity:1;transform:translateY(0); }
 .social-link { padding:8px 20px;border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:all .3s; }
 .social-link:hover { border-color:var(--text);color:var(--text); }
 
-/* FOOTER */
 footer { background:var(--off);padding:28px 56px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border); }
 .footer-copy { font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase; }
 .footer-logo { font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:var(--muted);letter-spacing:0.08em; }
 
-/* MODAL */
 #video-modal { display:none;position:fixed;inset:0;background:rgba(255,255,255,0.97);z-index:1000;align-items:center;justify-content:center;flex-direction:column; }
 .modal-close { position:absolute;top:32px;right:40px;background:none;border:none;font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:color .3s; }
 .modal-close:hover { color:var(--text); }
 
-/* ANIMATIONS */
 @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
 .reveal { opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease; }
 .reveal.visible { opacity:1;transform:none; }
 
-/* RESPONSIVE */
 @media (max-width:900px) {
   nav { padding:20px 24px; }
   .nav-links { display:none; }
+  .nav-socials { gap:14px; }
   #hero { padding:0 24px 72px; }
   #work { padding:80px 0; }
   .work-inner-header { padding:0 24px; }
@@ -196,10 +166,6 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   #contact { grid-template-columns:1fr;gap:48px;padding:80px 24px; }
   footer { flex-direction:column;gap:12px;text-align:center;padding:24px; }
 }
-
-.nav-socials { display:flex;align-items:center;gap:20px; }
-.nav-social-link { color:var(--muted);transition:color .3s;display:flex;align-items:center; }
-.nav-social-link:hover { color:var(--text); }
 </style>
 </head>
 <body>
@@ -232,7 +198,6 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   </div>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
   <p class="hero-eyebrow">Directeur de la Photographie</p>
   <h1 class="hero-title">Romain<br><em>Wilhelm</em></h1>
@@ -246,7 +211,6 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   </div>
 </section>
 
-<!-- VIDEO MODAL -->
 <div id="video-modal">
   <button class="modal-close" onclick="closeModal()">✕ Fermer</button>
   <div style="width:90vw;max-width:1100px;aspect-ratio:16/9;">
@@ -258,12 +222,10 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   </div>
 </div>
 
-<!-- WORK -->
 <section id="work">
   <div class="work-inner-header">
     <div class="work-header reveal">
-      <div>
-      </div>
+      <div></div>
       <div class="work-filters">
         <button class="filter-btn active" onclick="filterWork('all',this)">Tous</button>
         <button class="filter-btn" onclick="filterWork('fiction',this)">Fiction</button>
@@ -275,7 +237,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   <div class="work-grid">
     <div class="work-entry" data-cat="fiction" data-id="1179229656" data-title="Bêtes de Flic" data-dir="Dir. Slimane Baptiste Berhoun">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1179229656?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1179229656"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Bêtes de Flic</div>
@@ -285,7 +248,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="fiction" data-id="1125493349" data-title="Rien ne t’efface" data-dir="Dir. Jérôme Cornuau">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1125493349?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1125493349"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Rien ne t’efface</div>
@@ -295,7 +259,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="fiction" data-id="1001463620" data-title="Respire" data-dir="Dir. Jérôme Cornuau">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1001463620?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1001463620"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Respire</div>
@@ -305,7 +270,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="fiction" data-id="1001468503" data-title="Balthazar" data-dir="Dir. Vincent Jamain">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1001468503?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1001468503"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Balthazar</div>
@@ -315,7 +281,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="fiction" data-id="1004059417" data-title="Vise Le Coeur" data-dir="Dir. Vincent Jamain">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1004059417?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1004059417"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Vise Le Coeur</div>
@@ -323,19 +290,10 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
         <div class="work-cat">Fiction</div>
       </div>
     </div>
-    <div class="work-entry" data-cat="fiction" data-id="1001474155" data-title="Les Bracelets Rouges" data-dir="Dir. Christophe Campos">
-      <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1001474155?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
-      </div>
-      <div class="work-item-info">
-        <div class="work-name">Les Bracelets Rouges</div>
-        <div class="work-director">Dir. Christophe Campos</div>
-        <div class="work-cat">Fiction</div>
-      </div>
-    </div>
     <div class="work-entry" data-cat="fiction" data-id="1119240386" data-title="Maitighar" data-dir="Dir. Marc Gurung">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1119240386?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1119240386"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Maitighar</div>
@@ -343,9 +301,21 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
         <div class="work-cat">Fiction</div>
       </div>
     </div>
+    <div class="work-entry" data-cat="fiction" data-id="1001474155" data-title="Les Bracelets Rouges" data-dir="Dir. Christophe Campos">
+      <div class="work-item">
+        <div class="work-thumb-bg" id="vimeo-1001474155"></div>
+        <div class="work-item-overlay"></div>
+      </div>
+      <div class="work-item-info">
+        <div class="work-name">Les Bracelets Rouges</div>
+        <div class="work-director">Dir. Christophe Campos</div>
+        <div class="work-cat">Fiction</div>
+      </div>
+    </div>
     <div class="work-entry" data-cat="fiction" data-id="518086820" data-title="Hyperstition" data-dir="Dir. S. Chis & M. Chuchana">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/518086820?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-518086820"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Hyperstition</div>
@@ -355,7 +325,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="commercial" data-id="1078258408" data-title="Botanic" data-dir="Dir. Julien Faure">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1078258408?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1078258408"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Botanic</div>
@@ -365,7 +336,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="commercial" data-id="538251053" data-title="OTT" data-dir="Dir. Julien Rocher">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/538251053?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-538251053"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">OTT</div>
@@ -375,7 +347,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="commercial" data-id="1168595990" data-title="Bubble Up" data-dir="Dir. Julien Rocher">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1168595990?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1168595990"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Bubble Up</div>
@@ -385,7 +358,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="commercial" data-id="935535267" data-title="ADHAP" data-dir="Dir. Robin Pogorozelski">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/935535267?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-935535267"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">ADHAP</div>
@@ -395,7 +369,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="commercial" data-id="1168594196" data-title="Biogaran" data-dir="Dir. Zena Zeidan">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1168594196?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1168594196"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Biogaran</div>
@@ -405,7 +380,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="commercial" data-id="1076399388" data-title="France Pare Brise" data-dir="Dir. Julien Rocher">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/1076399388?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-1076399388"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">France Pare Brise</div>
@@ -415,7 +391,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="clip" data-id="889838032" data-title="Sumi Gaeshi" data-dir="Dir. Joris Fleurot">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/889838032?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-889838032"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Sumi Gaeshi</div>
@@ -425,7 +402,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="clip" data-id="761043490" data-title="Martin Luminet — Revenir" data-dir="Dir. Martin Luminet">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/761043490?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-761043490"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">Martin Luminet — Revenir</div>
@@ -435,7 +413,8 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     </div>
     <div class="work-entry" data-cat="clip" data-id="715889406" data-title="I-Science — True Self" data-dir="Dir. Zena Zeidan">
       <div class="work-item">
-        <div class="work-thumb-bg"><iframe src="https://player.vimeo.com/video/715889406?background=1&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="work-thumb-bg" id="vimeo-715889406"></div>
+        <div class="work-item-overlay"></div>
       </div>
       <div class="work-item-info">
         <div class="work-name">I-Science — True Self</div>
@@ -446,7 +425,6 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   </div>
 </section>
 
-<!-- ABOUT -->
 <section id="about">
   <div class="about-text reveal">
     <p class="section-label">À propos</p>
@@ -461,7 +439,6 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     <div class="about-stats">
       <div><div class="stat-num">12+</div><div class="stat-label">Années d'expérience</div></div>
       <div><div class="stat-num">60+</div><div class="stat-label">Projets réalisés</div></div>
-
     </div>
   </div>
   <div class="about-photo reveal">
@@ -469,7 +446,6 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
   <div class="reveal">
     <p class="section-label">Contact</p>
@@ -478,18 +454,9 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   </div>
   <div class="reveal">
     <div class="contact-info">
-      <div>
-        <div class="contact-item-label">Email</div>
-        <div class="contact-item-value"><a href="/cdn-cgi/l/email-protection#ff8d90929e9691d1889693979a9392d19b908fbf98929e9693d19c9092"><span class="__cf_email__" data-cfemail="b9cbd6d4d8d0d797ced0d5d1dcd5d497ddd6c9f9ded4d8d0d597dad6d4">[email&#160;protected]</span></a></div>
-      </div>
-      <div>
-        <div class="contact-item-label">Téléphone</div>
-        <div class="contact-item-value"><a href="tel:+33664281416">+33 6 64 28 14 16</a></div>
-      </div>
-      <div>
-        <div class="contact-item-label">Basé en</div>
-        <div class="contact-item-value">France — disponible à l'international</div>
-      </div>
+      <div><div class="contact-item-label">Email</div><div class="contact-item-value"><a href="mailto:romain.wilhelm.dop@gmail.com">romain.wilhelm.dop@gmail.com</a></div></div>
+      <div><div class="contact-item-label">Téléphone</div><div class="contact-item-value"><a href="tel:+33664281416">+33 6 64 28 14 16</a></div></div>
+      <div><div class="contact-item-label">Basé en</div><div class="contact-item-value">France — disponible à l'international</div></div>
     </div>
     <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--border);">
       <div class="contact-item-label">Réseaux</div>
@@ -507,7 +474,51 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   <span class="footer-logo">R. Wilhelm · DOP</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+  // Vimeo background players
+  function initVimeo(id) {
+    var container = document.getElementById('vimeo-' + id);
+    if (!container) return;
+    var iframe = document.createElement('iframe');
+    iframe.src = 'https://player.vimeo.com/video/' + id + '?background=1&autoplay=1&loop=1&muted=1&controls=0';
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+    iframe.style.cssText = 'position:absolute;top:-10%;left:-5%;width:110%;height:120%;border:none;pointer-events:none;filter:grayscale(8%) brightness(0.95);transition:filter .7s ease,transform .8s ease;';
+    container.appendChild(iframe);
+  }
+
+  window.addEventListener('load', function() {
+  initVimeo("1179229656");
+  initVimeo("1125493349");
+  initVimeo("1001463620");
+  initVimeo("1001468503");
+  initVimeo("1004059417");
+  initVimeo("1119240386");
+  initVimeo("1001474155");
+  initVimeo("518086820");
+  initVimeo("1078258408");
+  initVimeo("538251053");
+  initVimeo("1168595990");
+  initVimeo("935535267");
+  initVimeo("1168594196");
+  initVimeo("1076399388");
+  initVimeo("889838032");
+  initVimeo("761043490");
+  initVimeo("715889406");
+  });
+
+  // Hover effect on entries
+  document.querySelectorAll('.work-entry').forEach(function(entry) {
+    entry.addEventListener('mouseenter', function() {
+      var iframe = this.querySelector('iframe');
+      if (iframe) { iframe.style.filter = 'grayscale(0%) brightness(1)'; iframe.style.transform = 'scale(1.04)'; }
+    });
+    entry.addEventListener('mouseleave', function() {
+      var iframe = this.querySelector('iframe');
+      if (iframe) { iframe.style.filter = 'grayscale(8%) brightness(0.95)'; iframe.style.transform = 'scale(1)'; }
+    });
+  });
+
   function openModal(id, title, director) {
     var modal = document.getElementById('video-modal');
     document.getElementById('modal-iframe').src = 'https://player.vimeo.com/video/' + id + '?autoplay=1&color=111111&title=0&byline=0&portrait=0';
@@ -515,11 +526,13 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     document.getElementById('modal-dir').textContent = director;
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    document.body.style.cursor = 'auto';
   }
   function closeModal() {
     document.getElementById('video-modal').style.display = 'none';
     document.getElementById('modal-iframe').src = '';
     document.body.style.overflow = '';
+    document.body.style.cursor = 'none';
   }
   document.getElementById('video-modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
@@ -551,9 +564,9 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
   var reveals = document.querySelectorAll('.reveal');
   var obs = new IntersectionObserver(function(entries) {
     entries.forEach(function(e,i) {
-      if (e.isIntersecting) setTimeout(function(){e.target.classList.add('visible');}, i*80);
+      if (e.isIntersecting) setTimeout(function(){e.target.classList.add('visible');},i*80);
     });
-  }, {threshold:0.05});
+  },{threshold:0.05});
   reveals.forEach(function(r){ obs.observe(r); });
 
   function filterWork(cat, btn) {
@@ -561,4 +574,15 @@ footer { background:var(--off);padding:28px 56px;display:flex;justify-content:sp
     btn.classList.add('active');
     document.querySelectorAll('.work-entry').forEach(function(item) {
       var match = cat==='all' || item.dataset.cat===cat;
-      item.style.opacity = match ? '1' : '0.12'
+      item.style.opacity = match ? '1' : '0.12';
+      item.style.pointerEvents = match ? 'auto' : 'none';
+    });
+  }
+
+  var nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+</script>
+</body>
+</html>
